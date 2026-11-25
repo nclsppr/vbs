@@ -11,6 +11,7 @@ const VIEWS = ['view-ident', 'view-gate', 'view-tuning', 'view-queue', 'view-nos
 const SHORTCUTS = [1, 3, 5, 10];
 const REFRESH_EVERY = 30000;
 const IDENT = 1500; // how long the logo stays up once the tube is warm
+const PATIENCE = 500; // …and how much longer it may stay while the queue is read
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 /** Writes a text only when it differs, so that what did not change is not laid out again. */
@@ -192,9 +193,14 @@ export function createApp({ scene, tube, sound }) {
       $('party-name').textContent = boot.party.name;
       $('mode-badge').textContent = boot.mode === 'private' ? 'CABINE PRIVÉE' : 'SALLE';
       $('mode-badge').classList.toggle('is-private', boot.mode === 'private');
-      // The queue is still to be read: the waiting page says so.
-      if ($('view-tuning').hidden) show('view-tuning');
-      await refresh();
+      // The queue is still to be read. Coming from the logo, the waiting page
+      // only shows up when that takes a while: no page flashes by.
+      const reading = refresh();
+      if ($('view-tuning').hidden) {
+        const slow = await Promise.race([reading.then(() => false), wait(PATIENCE).then(() => true)]);
+        if (slow) show('view-tuning');
+      }
+      await reading;
       show('view-queue');
       if (window.matchMedia('(pointer: fine)').matches) $('q').focus();
     } catch (error) {

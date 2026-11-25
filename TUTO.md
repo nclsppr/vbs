@@ -92,7 +92,8 @@ Double-clique sur `Voter-web.cmd`. Le navigateur s'ouvre sur une vieille télé
 en bois, dans un jardin sous la neige : sapin, bonhomme de neige, guirlande,
 lune. Tout ce que fait le terminal se fait ici, sur l'écran de la télé.
 
-1. La télé est éteinte. Appuie sur **MARCHE** (ou sur le post-it).
+1. La télé est éteinte. Appuie sur **MARCHE** (ou sur le post-it). Elle chauffe
+   sur le logo Jukorama, le temps de trouver la fête.
 2. Choisis **Salle** (ton profil est gardé sur ce PC) ou **Cabine privée**
    (rien sur le disque, les comptes sont effacés quand tu éteins).
    Touches `1` et `2`.
