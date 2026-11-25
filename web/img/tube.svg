@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Outline of a picture tube: rounded corners and edges that bow outwards.
+       Used as a CSS mask and stretched to the element it shapes. -->
+  <path d="M50 0C78 0 92 .6 96.2 2.2 98.6 3.2 99.2 5.5 99.5 9 100 20 100 35 100 50S100 80 99.5 91C99.2 94.5 98.6 96.8 96.2 97.8 92 99.4 78 100 50 100S8 99.4 3.8 97.8C1.4 96.8.8 94.5.5 91 0 80 0 65 0 50S0 20 .5 9C.8 5.5 1.4 3.2 3.8 2.2 8 .6 22 0 50 0Z"/>
+</svg>

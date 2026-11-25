@@ -1,0 +1,41 @@
+Musique de la télévision Jukorama
+=================================
+
+Chants de Noël dont la mélodie est dans le domaine public. Les fichiers MIDI
+viennent de Wikimedia Commons, où leur auteur les a placés sous licence CC0
+(https://creativecommons.org/publicdomain/zero/1.0/deed.fr).
+
+vive-le-vent.mid  —  Vive le vent
+  Melody: James L. Pierpont 1857; setting & sound file: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:Jingle_Bells.mid
+
+mon-beau-sapin.mid  —  Mon beau sapin
+  Melodie: trad.; Satz und Tondatei: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:O_Tannenbaum.mid
+
+il-est-ne.mid  —  Il est né le divin enfant
+  Melody: French traditional; setting & sound file: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:Il_est_n%C3%A9_le_divin_enfant.mid
+
+we-wish-you.mid  —  We Wish You a Merry Christmas
+  Melody: trad.; setting & sound file: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:We_Wish_You_A_Merry_Christmas.mid
+
+deck-the-halls.mid  —  Deck the Halls
+  Melody: trad.; setting & sound file: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:Deck_the_Halls.mid
+
+joy-to-the-world.mid  —  Joy to the World
+  Melody: from England; setting & sound file: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:Joy_to_the_World_(Freue_dich,_Welt).mid
+
+douce-nuit.mid  —  Douce nuit
+  Melodie: Franz Xaver Gruber 1818; Satz und Tondatei: Rabanus Flavus (Peter Gerloff)
+  Licence : CC0
+  Source  : https://commons.wikimedia.org/wiki/File:Stille_Nacht,_heilige_Nacht.mid

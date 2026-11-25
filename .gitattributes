@@ -1,0 +1,10 @@
+# Text is stored with LF and checked out the way each machine likes it...
+* text=auto
+
+# ...except what Windows itself reads: cmd.exe and Notepad want CRLF.
+*.cmd text eol=crlf
+*.txt text eol=crlf
+
+*.mid binary
+*.woff2 binary
+*.png binary

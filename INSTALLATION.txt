@@ -1,0 +1,199 @@
+================================================================
+  JUKORAMA - VOTER POUR UNE CHANSON
+================================================================
+
+Contenu du dossier :
+  - Voter.cmd              <-- terminal, DOUBLE-CLIQUE ICI
+  - Voter-prive.cmd        terminal, mode prive
+  - Voter-web.cmd          television dans le navigateur
+  - Voter-web-prive.cmd    television, mode prive
+  - jukorama.js, fx.js, crt.js, web.js   le programme
+  - web\                   la page (neige, sapin, ecran cathodique)
+  - LISEZ-MOI.txt          demarrage rapide
+  - INSTALLATION.txt       ce guide
+  - node\                  present seulement dans la version
+                           "avec Node inclus" (rien a installer)
+
+Garde TOUT dans le meme dossier. Double-clique sur Voter.cmd.
+
+L'ecran d'accueil anime (sapin, neige, cadeaux, effet cathodique)
+peut etre passe avec n'importe quelle touche. Pour le desactiver :
+
+     set JUKORAMA_NO_FX=1
+
+avant de lancer, ou ajoute cette ligne dans Voter-prive.cmd.
+
+
+----------------------------------------------------------------
+1. AVANT DE COMMENCER : NODE.JS
+----------------------------------------------------------------
+
+Il faut Node.js (gratuit, une seule installation).
+
+  a) Va sur https://nodejs.org
+  b) Clique le bouton vert "LTS"
+  c) Installe en cliquant "Suivant" jusqu'au bout
+  d) Redemarre la session si necessaire
+
+Verification : ouvre une invite de commandes et tape
+
+     node --version
+
+Tu dois voir un numero comme "v24.15.0". Si tu vois une erreur,
+Node.js n'est pas installe ou pas dans le PATH.
+
+
+----------------------------------------------------------------
+2. UTILISER LE PROGRAMME
+----------------------------------------------------------------
+
+Double-clique sur Voter.cmd. Apres une courte animation de Noel,
+une fenetre encadree s'ouvre :
+
+     +== JUKORAMA ============================ party 375513 ==+
+     |       .---------------------------------.             |
+     |       |  *  27/11 - VBS's Staff Party    |            |
+     |       |     Code 375513 - 402 chansons   |            |
+     |       '---------------------------------'             |
+     |                                                       |
+     +== titre=vote | liste | mesvotes | reset | quitter ====+
+     | > tape le titre d'une chanson...                      |
+     +=======================================================+
+
+La barre du bas rappelle en permanence les commandes disponibles.
+(A l'ecran, le tout est en couleurs facon vieux terminal cathodique.)
+
+Tape le nom (ou une partie du nom) de la chanson, puis Entree.
+Exemples :
+
+     > paparazzi
+     > daft punk
+     > never gonna give you up
+
+Le programme affiche ce qu'il a compris et demande confirmation :
+
+     > paparazzi
+       -> Paparazzi - Lady Gaga  [1 vote]
+       Je vote pour ce titre ? [O/n]
+
+Tape "o" ou juste Entree pour confirmer. Le programme demande
+ensuite combien de votes mettre : Entree = un seul (le cas normal).
+
+Si tu as deja vote pour ce titre, il te le dit et propose :
+
+     [r] retirer mes votes   [v] revoter   Entree = ne rien faire
+
+
+----------------------------------------------------------------
+3. COMMANDES DISPONIBLES
+----------------------------------------------------------------
+
+     mesvotes     affiche TOUS tes votes : ceux de ton profil et
+                  ceux ajoutes pendant la session
+     liste        affiche le classement complet
+     reset        retire TOUS tes votes, dit combien, et affiche
+                  le nouveau total de chaque chanson
+     quitter      ferme le programme
+
+Exemple de reset :
+
+     > reset
+       ...
+       J'ai retire 5 vote(s) que tu avais mis dans cette session.
+         Maintenant 22 votes au total : Zoo - Kaaris
+
+Pour ne retirer que tes votes sur une chanson : tape son titre,
+puis "r".
+
+Si tu mets plusieurs votes sur un titre, les votes en plus partent
+de profils jetables. Ils ne peuvent etre retires que pendant la
+session : une fois le programme ferme, ils restent en place.
+
+
+----------------------------------------------------------------
+4. MODE PRIVE : CE QUE CA FAIT
+----------------------------------------------------------------
+
+- Cree un profil anonyme jetable pour la session
+- N'ecrit AUCUN fichier d'identite sur ton disque
+- Supprime le compte Firebase en quittant
+
+Tu peux mettre plusieurs votes sur un meme titre : un profil
+anonyme neuf est cree pour chaque vote, et le programme te le
+rappelle :
+
+     ! C'est ton 2e vote pour ce titre dans cette session.
+
+Dans ce mode, "mesvotes" et "reset" portent sur TOUTE la session,
+meme si les votes sont repartis sur plusieurs profils jetables.
+Le profil enregistre du mode normal n'est jamais touche.
+
+A la sortie, un recapitulatif t'affiche tout ce que tu as vote,
+et te propose de tout retirer avant la suppression des comptes.
+Apres, plus personne ne peut retirer ces votes.
+
+
+----------------------------------------------------------------
+5. CE QUI PEUT MAL SE PASSER
+----------------------------------------------------------------
+
+"Node.js n'est pas installe"
+     -> Voir la section 1.
+
+"Connexion reseau impossible" ou "Connect Timeout"
+     -> L'ordinateur n'a pas acces a Internet, ou le proxy
+        d'entreprise bloque. Le programme detecte normalement
+        le proxy tout seul.
+
+"Le script s'est arrete avec le code 1"
+     -> Le lanceur affiche un diagnostic. Copie-le pour demander
+        de l'aide.
+
+"Aucune chanson de la file ne correspond"
+     -> La chanson n'est pas encore dans la file de la party.
+        Festify n'autorise le vote que sur les chansons deja
+        ajoutees. Ajoute-la depuis le site, puis reviens.
+
+
+----------------------------------------------------------------
+6. LA TELEVISION (NAVIGATEUR)
+----------------------------------------------------------------
+
+Double-clique sur Voter-web.cmd. Une page locale s'ouvre (rien n'est
+installe d'autre). C'est la meme chose que le terminal, sur l'ecran
+d'une vieille tele dans un decor de Noel : neige, sapin, guirlande.
+
+  - MARCHE         allume la tele (elle est eteinte au depart)
+  - Salle          ton profil est garde sur ce PC
+  - Cabine privee  rien sur le disque, comptes effaces en eteignant
+  - CHERCHER       un titre ou un artiste ; Entree ouvre le premier
+  - Voter          sur la fiche : choisir le nombre, touche verte
+  - Retirer        enleve tous TES votes sur ce titre
+  - Tout retirer   touche rouge, le reset : il faut taper reset
+  - Eteindre       touche bleue : garder ou tout retirer, puis fin
+
+A droite de l'ecran : les curseurs NEIGE, CRT (effet cathodique) et
+SON, et le bouton qui change de chant de Noel.
+
+Les pochettes viennent de Spotify. Au premier lancement, elles
+arrivent au fur et a mesure pendant une a deux minutes ; ensuite
+elles s'affichent tout de suite.
+
+Laisse la fenetre noire ouverte. La fermer coupe la television.
+Voter-web-prive.cmd entre directement en cabine privee.
+
+Musique : chants de Noel du domaine public, fichiers sous licence
+CC0. Auteurs et sources : web\music\CREDITS.txt
+
+
+----------------------------------------------------------------
+7. PREMIER LANCEMENT UN PEU LENT
+----------------------------------------------------------------
+
+Environ 30 secondes : le programme telecharge la liste des titres
+des ~400 chansons pour pouvoir les retrouver par leur nom. C'est
+mis en cache dans un fichier data\tracks-index.json, pas dans ton
+profil. Les lancements suivants sont instantanes.
+
+
+================================================================

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="jukorama-token" content="__JUKORAMA_TOKEN__">
+  <title>Jukorama — la télé de Noël</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="preload" href="/fonts/vt323-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/tv.css">
+  <link rel="stylesheet" href="/css/screen.css">
+  <script type="module" src="/js/main.mjs"></script>
+</head>
+<body class="tv-off">
+  <svg class="defs" aria-hidden="true">
+    <!-- The Jukorama logo, drawn once: the badge, its "j", the same two as one shape
+         with the letter cut out, and the name. The symbols below arrange them. -->
+    <defs>
+      <path id="logo-shell" d="M87.7 2.5C112.3 0.8 145.4 0.9 169.4 5.8C182.7 8.5 196.5 11.9 206.2 22C216.4 32.6 221.3 47.4 224.2 61.5C229.7 89 228.8 118.6 222.1 145.7C218.8 158.6 213.1 172.2 203.2 181.5C188.8 195 161.2 198.5 142.1 200C114.7 202.1 84.5 202 57.5 196.2C44.4 193.3 30.6 188.9 21.4 178.5C12.8 168.8 8.6 155.7 5.6 143.3C-0.7 117.2 -1 82.1 6.6 56.3C10.3 43.6 14.8 30.6 24.8 21.3C40.2 6.9 67.5 3.9 87.7 2.5Z"/>
+      <path id="logo-j" d="M133.3 72.5C136.4 71.2 141 72 144.3 72C149.1 72 155.7 70.8 160 73.4C161.7 74.4 163.1 76 163.8 77.9C165.6 82.4 164.8 99.9 164.8 105.7C164.7 117.3 165.7 129.3 163.9 140.7C160.9 159 151.3 176 133.7 183.7C128.7 185.9 123.6 186.7 118.2 187.4C96.8 190.3 72.4 182.4 60.7 163.2C56.1 155.7 52.8 146.4 55.1 137.5C58.1 126.3 71.1 118.2 82.5 122.2C84.6 122.9 86.8 124.2 88.6 125.4C97.4 131.2 96.8 145.8 108.6 147.5C111.6 148 114.7 147.4 117.4 146.2C119.6 145.1 121.3 143.7 122.8 141.9C127.1 136.8 127 130 127 123.8C127 113.1 126.9 102.5 127 91.8C127 84.7 125.4 75.9 133.3 72.5ZM134.6 21.5C137.7 20.3 154.2 20.3 157.4 21.3C159.3 21.8 161.2 22.9 162.5 24.4C164.2 26.3 165.4 29 165.8 31.5C166.5 35.6 166.3 49.6 165 53.4C164 56.4 161.4 59.3 158.5 60.7C154.4 62.5 139 62.3 134.8 60.8C132.4 59.9 130 58 128.6 55.8C126.2 52 126 33.7 127.3 29.2C128.4 25.7 131.2 22.8 134.6 21.5Z"/>
+      <path id="logo-cut" fill-rule="evenodd" d="M87.7 2.5C112.3 0.8 145.4 0.9 169.4 5.8C182.7 8.5 196.5 11.9 206.2 22C216.4 32.6 221.3 47.4 224.2 61.5C229.7 89 228.8 118.6 222.1 145.7C218.8 158.6 213.1 172.2 203.2 181.5C188.8 195 161.2 198.5 142.1 200C114.7 202.1 84.5 202 57.5 196.2C44.4 193.3 30.6 188.9 21.4 178.5C12.8 168.8 8.6 155.7 5.6 143.3C-0.7 117.2 -1 82.1 6.6 56.3C10.3 43.6 14.8 30.6 24.8 21.3C40.2 6.9 67.5 3.9 87.7 2.5ZM133.3 72.5C136.4 71.2 141 72 144.3 72C149.1 72 155.7 70.8 160 73.4C161.7 74.4 163.1 76 163.8 77.9C165.6 82.4 164.8 99.9 164.8 105.7C164.7 117.3 165.7 129.3 163.9 140.7C160.9 159 151.3 176 133.7 183.7C128.7 185.9 123.6 186.7 118.2 187.4C96.8 190.3 72.4 182.4 60.7 163.2C56.1 155.7 52.8 146.4 55.1 137.5C58.1 126.3 71.1 118.2 82.5 122.2C84.6 122.9 86.8 124.2 88.6 125.4C97.4 131.2 96.8 145.8 108.6 147.5C111.6 148 114.7 147.4 117.4 146.2C119.6 145.1 121.3 143.7 122.8 141.9C127.1 136.8 127 130 127 123.8C127 113.1 126.9 102.5 127 91.8C127 84.7 125.4 75.9 133.3 72.5ZM134.6 21.5C137.7 20.3 154.2 20.3 157.4 21.3C159.3 21.8 161.2 22.9 162.5 24.4C164.2 26.3 165.4 29 165.8 31.5C166.5 35.6 166.3 49.6 165 53.4C164 56.4 161.4 59.3 158.5 60.7C154.4 62.5 139 62.3 134.8 60.8C132.4 59.9 130 58 128.6 55.8C126.2 52 126 33.7 127.3 29.2C128.4 25.7 131.2 22.8 134.6 21.5Z"/>
+      <path id="logo-letters" d="M277.1 69.5C279.9 68.6 283.1 68.9 286 68.9C290.2 68.9 295 68.2 298.7 70.5C300.3 71.5 302 73.1 302.8 74.8C305.8 81.1 304.2 99.9 304.3 107.6C304.3 114.6 304.3 121.6 304.4 128.6C304.4 134.9 304.7 141.4 303.7 147.6C301.6 160.4 293.3 172.1 282.3 178.9C278 181.5 273.5 183.5 268.6 184.8C256.6 188.1 242.2 185 242 170C242 166 243 161.9 245.3 158.6C252.2 149 266.9 155.2 268.9 140.1C269.8 133.9 269.2 127.4 269.2 121.1C269.2 110.5 269.2 99.8 269.2 89.1C269.2 81.8 268.4 72.4 277.1 69.5ZM282.7 25.5C286 24.7 289.4 25 292.6 25.8C302.6 28 305 35.4 304.8 44.6C304.7 52.9 301.3 59.6 292.6 61.7C287 63 278 62.3 273.6 58.4C265.5 51.1 266.3 35.8 274.6 29C276.9 27.1 279.9 26.2 282.7 25.5ZM322.1 58.5C329.3 56.5 338.4 61.2 340.8 68.3C342.8 74.2 342 99.4 341.9 107.2C341.9 114.4 344.5 122 353 122.1C360.5 122.1 364.8 115.8 364.9 108.9C365 99.9 364.9 90.9 364.9 81.9C364.9 78.1 364.3 73.6 365.3 69.9C368.5 58.5 382.6 53.8 391.6 62C398.2 68 396.2 81.4 396.2 89.7C396.3 98.9 397 108.6 395.9 117.7C394 133.8 383.2 147.1 367.7 151.9C346.5 158.4 320.6 150.9 312.3 129C308.7 119.5 309.5 109.2 309.4 99.3C309.4 93.6 309.4 87.9 309.4 82.3C309.5 71 309.3 62.1 322.1 58.5ZM433.5 85.7C441.7 78.5 459.3 59.2 469.5 57.9C471.8 57.6 474.1 57.1 476.4 57.3C484.3 58.2 493.1 63.5 490.1 72.8C487.7 79.9 478 85.5 472.5 90.2C470.7 91.7 469.1 93.4 467.2 94.8C463.8 97.3 459.3 100.4 457 103.9C458.6 106 460.6 107.6 462.7 109.4C468.4 114.4 474.3 119.3 480 124.4C481.5 125.7 483.2 126.9 484.6 128.3C486.3 130.2 487.9 132.7 488.6 135.2C489.1 137.1 489 139.2 488.6 141.1C486.9 151 475.6 155.3 466.6 152.9C463.5 152.1 460.4 150.4 457.9 148.3C454.6 145.5 452 141.9 449.1 138.7C443.9 133 438.8 127.4 433.7 121.6C430.5 127.7 436.3 140.2 429.4 148.1C421.8 156.6 404.6 155 402 142.6C400.7 136.4 401.5 124.5 401.4 117.7C401.1 99.7 401.2 81.6 401.5 63.7C401.6 56.8 400.5 34.8 402.2 29.7C406.6 16.7 424 16.3 430.8 27.3C433.6 31.9 432.8 37.9 432.9 43C432.9 50.5 431.9 81.1 433.5 85.7ZM520.6 58.5C525.7 57.3 531.4 57.8 536.6 57.8C554.2 57.7 567.9 57.9 579.6 73.2C585.8 81.4 586.7 92.8 586.7 102.8C586.7 109.4 587 116.1 585.7 122.7C583.1 136.6 573.5 148.8 559.2 152C552 153.7 544.8 153.7 537.4 153.7C521.5 153.7 508.5 153.2 497.5 140.2C490.2 131.6 488.7 120 488.7 109.2C488.7 102.8 488.5 96.5 489.3 90.2C491.2 76.6 500.6 64.4 513.9 60.1C516.1 59.4 518.4 59.1 520.6 58.5ZM526.6 88.5C529.5 87.4 545.6 87.3 548.6 88.3C550.5 89 552.2 90.1 553.5 91.6C557.4 96.2 557.3 111.5 554.8 116.8C553.6 119.3 551.6 121.1 549 122.1C544.5 123.8 530.7 123.7 526.3 121.8C524.5 121 522.9 119.6 521.7 118C518.5 113.7 518.4 100.6 520 95.6C521.1 92.3 523.5 89.7 526.6 88.5ZM621.8 66.5C625.7 63.4 628.5 59.4 633.8 58.1C645.9 55.1 657.3 65.2 653.1 77.7C648.5 91.2 633 84.4 625.9 95.2C621.2 102.3 622.9 122.8 623 131.7C623 134.6 623.3 137.8 622.7 140.7C620.9 150.3 611.6 155.2 602.3 153C591.5 150.4 591.2 140.1 591.2 131.1C591.3 116.8 591.1 102.4 591.2 88.1C591.3 81.4 590.1 73.6 592.2 67.2C595 58.6 606.4 55.5 614 59.1C617.4 60.8 619.2 64 621.8 66.5ZM720.4 65.6C722.9 63.4 724.7 60.8 727.9 59.3C736.4 55.1 747.8 59 751.6 67.8C754.1 73.9 753.2 83.1 753.1 89.7C752.9 101.7 753.1 113.7 753.1 125.7C753.1 131.9 754 138.7 751.5 144.5C747.5 153.6 735.8 156.2 727.6 151.9C723.8 149.9 722.1 146.3 719.6 143.1C717.4 144.6 715.6 146.4 713.4 148C708.6 151.3 702.5 153.5 696.7 154.2C691.4 154.8 686 154.8 680.8 153.4C631.7 140.1 642.6 57.9 695.3 57.2C701.6 57.2 708.1 58.5 713.6 61.4C716 62.7 718 64.5 720.4 65.6ZM695.6 87.5C697.5 86.9 699.6 86.9 701.6 87C722 87.8 725.8 117.7 704.2 123.7C701.4 124.4 698 124.1 695.3 123.3C677.4 118 678 92.8 695.6 87.5ZM820.2 71.9C820.5 71.7 820.8 71.9 821.1 71.8C822.3 71.3 824.4 67.6 825.6 66.5C827.2 64.8 829.2 63.5 831.1 62.2C841.9 55.2 857.5 55.8 867.9 63.5C882.7 74.3 882.9 87.7 882.8 104.6C882.8 111.2 882.8 117.9 882.8 124.6C882.8 134.2 884.7 146.1 874.9 151.7C866.5 156.5 854.9 152.8 851.7 143.5C849.7 137.6 850.8 112.3 850.8 104.5C850.8 98.7 851.7 89.8 843.2 89.9C834.5 90 835.7 99.7 835.7 105.6C835.7 113.1 836.6 138.1 834.8 143.6C832 152.1 821.2 155.9 813.3 152.5C810 151.1 806.8 148.6 805.3 145.3C802.4 139.4 803.7 115.5 803.7 107.5C803.7 102.3 805.2 91.4 798 90.1C789.1 88.4 788.7 96.6 788.7 102.8C788.8 110.4 789.8 138.4 787.8 143.7C784.2 153.4 771.8 156.6 763.7 150.8C756.9 146 757.4 138.2 757.4 130.8C757.4 126.8 757.4 122.8 757.4 118.8C757.4 104.5 755.2 88.7 762.1 75.6C770.9 58.8 794.2 51.9 810.4 62C814.6 64.6 817.3 68.1 820.2 71.9ZM956.8 65.6C959.3 63.6 961.3 60.8 964.3 59.2C972.5 54.9 983.3 58.9 987.9 66.4C992.2 73.3 990.7 86.7 990.8 94.8C990.8 105.2 990.7 115.5 990.8 125.8C990.8 131.2 991.6 137.5 989.6 142.6C985.8 152.6 974.4 156.8 964.9 152C962.4 150.7 959.9 148.3 958.4 146C957.9 145.2 957.6 144 956.9 143.4C956.7 143.2 956.4 143.3 956.2 143.1C950.6 147.6 945.3 151.5 938.1 153.2C932.5 154.5 927.1 154.8 921.3 154.2C905.3 152.5 893.6 140.7 888.4 126C886.8 121.4 886.4 116.2 886.1 111.3C885.6 103.7 885.9 95.8 888.3 88.5C894.6 69.1 911.3 56.7 931.9 57.1C938.9 57.3 945.8 58.8 951.9 62.5C953.5 63.5 955.1 64.7 956.8 65.6ZM932 87.5C935.4 86.5 939.5 86.7 942.8 87.8C961 94 958.5 119.4 940.3 123.8C937.4 124.4 934.2 123.9 931.4 123.2C913.5 118.1 914.7 92.6 932 87.5Z"/>
+    </defs>
+    <symbol id="logo-mark" viewBox="-1 0 230 203">
+      <use href="#logo-cut"/>
+    </symbol>
+    <symbol id="logo-badge" viewBox="-1 0 230 203">
+      <use href="#logo-shell" fill="#e8492d"/>
+      <use href="#logo-j" fill="#fff"/>
+    </symbol>
+    <symbol id="logo-initial" viewBox="53 19 115 170">
+      <use href="#logo-j"/>
+    </symbol>
+    <symbol id="logo-word" viewBox="241 18 751 169">
+      <use href="#logo-letters"/>
+    </symbol>
+    <symbol id="logo" viewBox="-1 0 993 203">
+      <use href="#logo-cut"/>
+      <use href="#logo-letters"/>
+    </symbol>
+    <symbol id="logo-colour" viewBox="-1 0 993 203">
+      <use href="#logo-shell" fill="#e8492d"/>
+      <use href="#logo-j" fill="#fff"/>
+      <use href="#logo-letters"/>
+    </symbol>
+    <symbol id="icon-heart" viewBox="0 0 7 6" shape-rendering="crispEdges">
+      <path d="M1 0h2v1H1zM4 0h2v1H4zM0 1h7v2H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z"/>
+    </symbol>
+    <symbol id="icon-note" viewBox="0 0 8 10" shape-rendering="crispEdges">
+      <path d="M4 0h4v3H5v5H4zM1 6h4v3H1z"/>
+    </symbol>
+    <symbol id="icon-skip" viewBox="0 0 12 8">
+      <path d="M0 0l5 4-5 4zM5 0l5 4-5 4zM10.5 0H12v8h-1.5z"/>
+    </symbol>
+    <symbol id="icon-power" viewBox="0 0 24 24">
+      <path d="M12 3.5v8M7.2 6.6a7.4 7.4 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <canvas id="backdrop" class="layer" aria-hidden="true"></canvas>
+  <canvas id="snow-far" class="layer" aria-hidden="true"></canvas>
+
+  <div class="stage">
+    <div class="decor decor-tree" aria-hidden="true">
+      <canvas id="tree"></canvas>
+      <canvas id="tree-lights"></canvas>
+    </div>
+    <div class="decor decor-snowman" aria-hidden="true">
+      <canvas id="snowman"></canvas>
+    </div>
+
+    <main class="tv">
+      <div class="tv-antenna" aria-hidden="true"><i></i><i></i><b></b></div>
+      <div class="tv-feet" aria-hidden="true"><i></i><i></i></div>
+
+      <div class="tv-cabinet" id="cabinet">
+        <div class="tv-face">
+          <div class="tube-rim">
+            <div class="tube" id="tube">
+              <div class="picture" id="picture">
+
+                <section class="view view-ident" id="view-ident" hidden>
+                  <svg class="ident-initial" aria-hidden="true"><use href="#logo-initial"/></svg>
+                  <svg class="ident-word" role="img" aria-label="Jukorama"><use href="#logo-word"/></svg>
+                  <p class="ident-line">LA TÉLÉ DE NOËL</p>
+                </section>
+
+                <section class="view" id="view-gate" hidden>
+                  <header class="osd-bar">
+                    <span>P001</span>
+                    <svg class="osd-logo" aria-hidden="true"><use href="#logo-mark"/></svg>
+                    <span class="osd-title">JUKORAMA</span>
+                    <span class="osd-clock">JOYEUX NOËL</span>
+                  </header>
+                  <h1 class="gate-title">Comment veux-tu voter ?</h1>
+                  <div class="choices">
+                    <button type="button" class="choice" id="pick-normal">
+                      <span class="choice-key">1</span>
+                      <span class="choice-name">Salle</span>
+                      <span class="choice-text">Ton profil est gardé sur ce PC. Tu retrouves tes votes la prochaine fois.</span>
+                    </button>
+                    <button type="button" class="choice choice-booth" id="pick-private">
+                      <span class="choice-key">2</span>
+                      <span class="choice-name">Cabine privée</span>
+                      <span class="choice-text">Profils jetables, rien n’est écrit sur le disque. Les comptes sont effacés quand tu éteins.</span>
+                    </button>
+                  </div>
+                  <p class="gate-hint">Touches 1 et 2, ou clique.</p>
+                </section>
+
+                <section class="view view-tuning" id="view-tuning" hidden>
+                  <svg class="logo-line tuning-logo" aria-hidden="true"><use href="#logo"/></svg>
+                  <p class="tuning-title">RECHERCHE DES CHAÎNES</p>
+                  <p class="tuning-text" id="tuning-text" role="status"></p>
+                  <div class="meter" id="tuning-meter"><i></i></div>
+                </section>
+
+                <section class="view" id="view-queue" hidden>
+                  <header class="osd-bar">
+                    <span>P100</span>
+                    <svg class="osd-logo" aria-hidden="true"><use href="#logo-mark"/></svg>
+                    <span class="osd-title">JUKORAMA</span>
+                    <span class="osd-mode" id="mode-badge"></span>
+                    <span class="osd-clock" id="clock"></span>
+                  </header>
+                  <div class="party">
+                    <h1 class="party-name" id="party-name"></h1>
+                    <p class="party-meta" id="party-meta"></p>
+                  </div>
+                  <form class="search" id="search" role="search">
+                    <label for="q">CHERCHER</label>
+                    <input id="q" name="q" type="text" autocomplete="off" spellcheck="false" placeholder="un titre, un artiste…">
+                    <kbd>Entrée ouvre le premier</kbd>
+                  </form>
+                  <div class="columns" id="columns">
+                    <section class="col col-queue" aria-labelledby="queue-title">
+                      <h2 class="col-title" id="queue-title">LA FILE</h2>
+                      <ol class="rows scroll" id="rows"></ol>
+                      <p class="empty" id="rows-empty" hidden></p>
+                    </section>
+                    <section class="col col-mine" id="mine" aria-labelledby="mine-title">
+                      <h2 class="col-title" id="mine-title">MES VOTES</h2>
+                      <div class="mine-body scroll" id="mine-body"></div>
+                    </section>
+                  </div>
+                  <nav class="keys" aria-label="Actions">
+                    <button type="button" class="key key-red" id="key-reset">Tout retirer</button>
+                    <button type="button" class="key key-green" id="key-refresh">Actualiser</button>
+                    <button type="button" class="key key-yellow" id="key-mine" aria-pressed="false">Mes votes</button>
+                    <button type="button" class="key key-blue" id="key-leave">Éteindre</button>
+                  </nav>
+                </section>
+
+                <section class="overlay" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+                  <header class="osd-bar">
+                    <span>P300</span>
+                    <span class="osd-title">VOTER</span>
+                    <button type="button" class="osd-close" id="sheet-close">Retour</button>
+                  </header>
+                  <div class="sheet-body scroll">
+                    <div class="sheet-cover" id="sheet-cover"></div>
+                    <div class="sheet-main">
+                      <div class="sheet-head">
+                        <h2 class="sheet-title" id="sheet-title"></h2>
+                        <p class="sheet-artist" id="sheet-artist"></p>
+                        <p class="sheet-stats" id="sheet-stats"></p>
+                      </div>
+                      <div class="sheet-notes" id="sheet-notes"></div>
+                      <div class="amount">
+                        <button type="button" class="step" id="amount-less" aria-label="Un vote de moins">−</button>
+                        <span class="amount-value" id="amount-value" aria-live="polite"></span>
+                        <button type="button" class="step" id="amount-more" aria-label="Un vote de plus">+</button>
+                        <div class="chips" id="amount-chips"></div>
+                      </div>
+                      <div class="sheet-actions">
+                        <button type="button" class="key key-green key-big" id="sheet-vote"></button>
+                        <button type="button" class="key key-red" id="sheet-withdraw" hidden></button>
+                      </div>
+                      <div class="meter" id="sheet-meter" hidden><i></i></div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="overlay" id="dialog" hidden role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+                  <header class="osd-bar">
+                    <span id="dialog-page"></span>
+                    <span class="osd-title" id="dialog-title"></span>
+                  </header>
+                  <div class="dialog-body scroll" id="dialog-body"></div>
+                  <div class="dialog-actions" id="dialog-actions"></div>
+                </section>
+
+                <div class="stamp" id="stamp" hidden role="status">
+                  <p class="stamp-count" id="stamp-count"></p>
+                  <p class="stamp-title" id="stamp-title"></p>
+                  <p class="stamp-total" id="stamp-total"></p>
+                </div>
+
+                <div class="wait" id="wait" hidden role="status">
+                  <p id="wait-text"></p>
+                  <div class="meter is-waiting"><i></i></div>
+                </div>
+
+                <section class="view view-nosignal" id="view-nosignal" hidden>
+                  <div class="nosignal-box">
+                    <svg class="logo-line nosignal-logo" aria-hidden="true"><use href="#logo"/></svg>
+                    <p class="nosignal-title">PAS DE SIGNAL</p>
+                    <p id="nosignal-text" role="alert"></p>
+                    <button type="button" class="key key-green" id="nosignal-retry">Réessayer</button>
+                  </div>
+                </section>
+
+                <section class="view view-bye" id="view-bye" hidden>
+                  <svg class="logo-line bye-logo" aria-hidden="true"><use href="#logo"/></svg>
+                  <p class="bye-title">À LA PROCHAINE</p>
+                  <div class="bye-text" id="bye-text" role="status"></div>
+                </section>
+
+                <p class="toast" id="toast" hidden role="status"></p>
+              </div>
+
+              <canvas class="tube-fx tube-noise" id="tube-noise" width="192" height="128" aria-hidden="true"></canvas>
+              <div class="tube-fx tube-lines" aria-hidden="true"></div>
+              <div class="tube-fx tube-roll" aria-hidden="true"></div>
+              <div class="tube-fx tube-beam" aria-hidden="true"></div>
+              <div class="tube-fx tube-glass" aria-hidden="true"></div>
+              <button type="button" class="note" id="note">
+                <b id="note-title">Allume-moi !</b>
+                <span id="note-text">Bouton MARCHE, à droite →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="tv-panel" aria-label="Réglages de la télévision">
+          <div class="plate" role="img" aria-label="Jukorama Noël-o-Vision">
+            <svg class="plate-logo" aria-hidden="true"><use href="#logo-colour"/></svg>
+            <svg class="plate-badge" aria-hidden="true"><use href="#logo-badge"/></svg>
+            <span aria-hidden="true">Noël-o-Vision</span>
+          </div>
+          <div class="faders">
+            <label class="fader">
+              <span class="fader-slot"><i class="fader-knob"></i><input type="range" id="fader-snow" min="0" max="100" step="5" value="100" aria-label="Neige"></span>
+              <span class="fader-name">NEIGE</span>
+            </label>
+            <label class="fader">
+              <span class="fader-slot"><i class="fader-knob"></i><input type="range" id="fader-crt" min="0" max="100" step="5" value="100" aria-label="Effet cathodique"></span>
+              <span class="fader-name">CRT</span>
+            </label>
+            <label class="fader">
+              <span class="fader-slot"><i class="fader-knob"></i><input type="range" id="fader-sound" min="0" max="100" step="5" value="70" aria-label="Son"></span>
+              <span class="fader-name">SON</span>
+            </label>
+          </div>
+          <button type="button" class="tune" id="tune" aria-label="Musique : morceau suivant">
+            <svg class="tune-icon" aria-hidden="true"><use href="#icon-note"/></svg>
+            <span class="tune-name" id="tune-name"></span>
+            <svg class="tune-icon tune-skip" aria-hidden="true"><use href="#icon-skip"/></svg>
+          </button>
+          <div class="grille" aria-hidden="true"></div>
+          <button type="button" class="power" id="power" aria-pressed="false" aria-label="Marche / arrêt">
+            <i class="power-led" aria-hidden="true"></i>
+            <span class="power-cap"><svg aria-hidden="true"><use href="#icon-power"/></svg></span>
+            <span>MARCHE</span>
+          </button>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <canvas id="snow-near" class="layer" aria-hidden="true"></canvas>
+  <canvas id="confetti" class="layer" aria-hidden="true"></canvas>
+</body>
+</html>

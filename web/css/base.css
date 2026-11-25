@@ -1,0 +1,139 @@
+/* Page, fonts and the winter scene the television stands in. */
+
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/vt323-latin-ext.woff2") format("woff2");
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/vt323-latin.woff2") format("woff2");
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* The television leaves room for the garland above it, the snow below and
+     the tree and the snowman beside it. --u is one hundredth of its width. */
+  --tv-w: min(74vw, 124vh);
+  --tv-h: 77vh;
+  --tv-top: 11.5vh;
+  --u: calc(var(--tv-w) / 100);
+  --margin: calc((100vw - var(--tv-w)) / 2);
+
+  /* Text on the screen follows the size of the set, within readable bounds. */
+  --f: clamp(8.6px, var(--u), 18px);
+
+  /* The tree and the snowman grow with the room left beside the set: the set
+     only hides the tips of their lowest boughs and one twig. */
+  --tree-w: min(47.5vh, calc(var(--margin) * 1.7));
+  --snowman-w: min(32vh, calc(var(--margin) * 1.2));
+
+  /* Set by the CRT fader, from 0 (clean picture) to 1. */
+  --crt: 1;
+
+  --ink: #f4f7ff;
+  --dim: #93a6d0;
+  --cyan: #62e6ff;
+  --yellow: #ffe14d;
+  --green: #45ef8f;
+  --red: #ff4b5c;
+  --magenta: #ff62d2;
+  --blue: #2440c9;
+  --night: #050918;
+  --row: #0c1433;
+  --row-alt: #111c45;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: #060b1f;
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Full-window canvases, back to front: sky and hills, far snow and garland,
+   then (above the stage) near snow with its drifts, and confetti. */
+.layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#backdrop { z-index: 0; }
+#snow-far { z-index: 1; }
+.stage { position: fixed; inset: 0; z-index: 2; }
+#snow-near { z-index: 3; }
+#confetti { z-index: 4; }
+
+/* The tree and the snowman stand behind the television, one on each side. */
+.decor {
+  position: absolute;
+  pointer-events: none;
+}
+
+.decor canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Centred in the left margin when there is room; otherwise against the edge
+   of the window, its right side behind the set. */
+.decor-tree {
+  bottom: 3.2vh;
+  left: max(var(--tree-w) * -0.08, (var(--margin) - var(--tree-w)) / 2);
+  width: var(--tree-w);
+  aspect-ratio: 58 / 100;
+}
+
+.decor-snowman {
+  right: calc(var(--margin) / 2 - var(--snowman-w) / 2);
+  bottom: 3.4vh;
+  width: var(--snowman-w);
+  aspect-ratio: 4 / 5;
+}
+
+/* A window taller than wide: the television takes the width, the controls
+   move under the tube and the decor makes room. */
+@media (max-aspect-ratio: 11/10) {
+  :root {
+    --tv-w: 96vw;
+    --tv-top: max(9vh, 64px);
+    --tv-h: calc(100vh - var(--tv-top) - 7vh);
+    --u: calc(var(--tv-w) / 62);
+  }
+
+  .decor {
+    display: none;
+  }
+}

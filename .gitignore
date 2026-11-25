@@ -1,0 +1,11 @@
+# What the program writes while it runs: the saved voting profile (with its
+# tokens) and the title cache. Never to be shared.
+data/
+
+# Built by build-dist.cmd.
+dist/
+*.zip
+
+# A portable Node.js, when one is dropped beside the launchers.
+node/
+node_modules/
