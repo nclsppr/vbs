@@ -143,7 +143,9 @@ export function createApp({ scene, tube, sound }) {
   function showSearch(progress, found = false) {
     const reading = Boolean(progress && progress.step === 'index' && progress.total);
     $('tuning-text').textContent = reading
-      ? `Je lis les titres de la file… ${progress.done}/${progress.total}`
+      ? progress.waiting
+        ? `Je lis les titres de la file… ${progress.done}/${progress.total}. Petite pause, je reprends.`
+        : `Je lis les titres de la file… ${progress.done}/${progress.total}`
       : found
         ? 'J’ouvre la file…'
         : 'Je cherche la fête…';

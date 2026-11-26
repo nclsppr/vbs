@@ -225,6 +225,13 @@ async function http(url, options = {}) {
   try {
     return await fetch(url, options);
   } catch (err) {
+    // AbortSignal.timeout: a request that never answers must not freeze the page.
+    const causeName = err.cause && err.cause.name;
+    if (err.name === 'TimeoutError' || err.name === 'AbortError' || causeName === 'TimeoutError' || causeName === 'AbortError') {
+      const error = new Error(`Délai dépassé vers ${new URL(url).host}.`);
+      error.code = 'ETIMEOUT';
+      throw error;
+    }
     // Node hides the real reason in err.cause; surface it, because a bare
     // "fetch failed" is impossible to act on.
     const cause = err.cause || {};
@@ -271,12 +278,12 @@ function loadAuth() {
   return readJson(AUTH_FILE, null);
 }
 
-function saveAuth(auth) {
+async function saveAuth(auth) {
   // Throwaway accounts live in memory only. The flag on the account matters as
   // much as the mode: such an account can still be refreshed later (undo,
   // erasure on exit) once the session is back on the saved profile.
   if (ephemeralIdentity() || (auth && auth.ephemeral)) return;
-  writeJson(AUTH_FILE, auth);
+  await writeJson(AUTH_FILE, auth);
 }
 
 async function signUpAnonymous() {
@@ -303,7 +310,7 @@ async function signUpAnonymous() {
   // Mark throwaway accounts for good, so they can never be persisted whatever
   // the mode is by the time their token gets refreshed.
   if (ephemeralIdentity()) auth.ephemeral = true;
-  saveAuth(auth);
+  await saveAuth(auth);
   // Private mode deletes these accounts on exit; keep track of every one created.
   if (privateSession.active) privateSession.accounts.push(auth);
   else if (EXTRAS_MODE) extras.accounts.push(auth);
@@ -357,7 +364,7 @@ async function refreshIdToken(auth) {
     refreshToken: body.refresh_token,
     expiresAt: Date.now() + (Number(body.expires_in) - 120) * 1000,
   };
-  saveAuth(next);
+  await saveAuth(next);
   return next;
 }
 
@@ -424,19 +431,43 @@ function decodeEntities(s) {
     .replace(/&gt;/g, '>');
 }
 
+// One pause shared by every title lookup. Without it, each of the three workers
+// sleeps on its own after a throttle and the counter looks frozen.
+let spotifyNotBefore = 0;
+let onSpotifyWait = null;
+
+function holdSpotify(ms) {
+  spotifyNotBefore = Math.max(spotifyNotBefore, Date.now() + ms);
+}
+
+async function whenSpotifyReady() {
+  const left = spotifyNotBefore - Date.now();
+  if (left <= 0) return;
+  if (onSpotifyWait) onSpotifyWait(true);
+  await sleep(left);
+  if (spotifyNotBefore <= Date.now() && onSpotifyWait) onSpotifyWait(false);
+}
+
 async function fetchTrackMeta(spotifyId, attempt = 0) {
+  await whenSpotifyReady();
   try {
     // The embed page ships its data as JSON in __NEXT_DATA__, which is more
     // reliable than scraping og: tags from the full web player page.
+    // Twelve seconds, not the default five minutes: one title that never answers
+    // must not hold up the whole list.
     const res = await http(`https://open.spotify.com/embed/track/${spotifyId}`, {
       headers: { 'User-Agent': UA, 'Accept-Language': 'en' },
+      signal: AbortSignal.timeout(12000),
     });
 
     if (res.status === 429) {
-      // Spotify throttles aggressively; honour Retry-After and back off.
+      // Drop the body so the connection is not left open, then wait once for everyone.
+      if (res.body && typeof res.body.cancel === 'function') await res.body.cancel().catch(() => {});
       const retryAfter = Number(res.headers.get('retry-after'));
-      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 1500 * 2 ** attempt;
-      throw new Error(`THROTTLED:${Math.min(waitMs, 30000)}`);
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 2000 * (attempt + 1);
+      holdSpotify(Math.min(waitMs, 15000));
+      if (attempt < 5) return fetchTrackMeta(spotifyId, attempt + 1);
+      return { title: null, artists: null, error: 'rate limited' };
     }
     if (res.status >= 500) throw new Error(`HTTP ${res.status}`);
     if (!res.ok) return { title: null, artists: null, error: `HTTP ${res.status}` };
@@ -463,15 +494,17 @@ async function fetchTrackMeta(spotifyId, attempt = 0) {
     }
     throw new Error('no track data in page');
   } catch (err) {
-    const throttled = /^THROTTLED:(\d+)$/.exec(err.message);
-    const maxAttempts = throttled ? 6 : 3;
-
-    if (attempt < maxAttempts) {
-      const waitMs = throttled ? Number(throttled[1]) : 500 * (attempt + 1);
-      await sleep(waitMs);
+    if (err.code === 'ETIMEOUT') {
+      if (attempt < 1) {
+        holdSpotify(1000);
+        return fetchTrackMeta(spotifyId, attempt + 1);
+      }
+      return { title: null, artists: null, error: 'timeout' };
+    }
+    if (attempt < 2) {
+      await sleep(400 * (attempt + 1));
       return fetchTrackMeta(spotifyId, attempt + 1);
     }
-    if (throttled) return { title: null, artists: null, error: 'rate limited' };
     return { title: null, artists: null, error: err.message };
   }
 }
@@ -528,9 +561,9 @@ async function loadIndex() {
   return cachedIndex;
 }
 
-function saveIndexFile(index) {
+async function saveIndexFile(index) {
   cachedIndex = index;
-  writeJson(INDEX_FILE, index);
+  await writeJson(INDEX_FILE, index);
 }
 
 async function buildIndex(party, { force = false, quiet = false, onProgress = null } = {}) {
@@ -563,12 +596,26 @@ async function buildIndex(party, { force = false, quiet = false, onProgress = nu
   const total = missing.length;
   let failed = 0;
   let dirty = force || index.party !== partyBefore;
+  let timeouts = 0;
+  let gaveUp = false;
   if (onProgress) onProgress(0, total); // the listener knows how many are coming before the first one is read
+  onSpotifyWait = (waiting) => {
+    if (onProgress) onProgress(done, total, waiting);
+  };
 
   async function worker() {
-    while (missing.length) {
+    while (missing.length && !gaveUp) {
       const track = missing.shift();
+      if (!track) break;
       const meta = await fetchTrackMeta(track.id);
+      // Several titles in a row that never answer: stop, keep what is already
+      // named, and let the next launch continue. Waiting on each one is the freeze.
+      if (meta.error === 'timeout') {
+        timeouts += 1;
+        if (timeouts >= 4) gaveUp = true;
+        continue;
+      }
+      if (meta.title) timeouts = 0;
       if (meta.title) {
         index.tracks[track.key] = { id: track.id, title: meta.title, artists: meta.artists };
         if (meta.image) index.tracks[track.key].image = meta.image;
@@ -583,17 +630,26 @@ async function buildIndex(party, { force = false, quiet = false, onProgress = nu
     }
   }
 
-  // One write for the whole list. Rewriting the file after every title is what
-  // made a network folder answer EBUSY, and what made the page fail on it.
-  await Promise.all(Array.from({ length: 3 }, () => worker()));
-  if (dirty) {
-    try {
-      saveIndexFile(index);
-    } catch (err) {
+  // One write for the whole list, and it cannot freeze the page: a network
+  // folder sometimes waits forever instead of answering EBUSY.
+  try {
+    await Promise.all(Array.from({ length: 3 }, () => worker()));
+    if (gaveUp) {
       console.log(
-        `Cache des titres non enregistré (${err.code || err.message}). La liste reste utilisable pour cette séance.`,
+        'Lecture des titres interrompue : le service ne répond plus. Ce qui est déjà lu reste, le reste sera relu au prochain lancement.',
       );
     }
+    if (dirty) {
+      try {
+        await saveIndexFile(index);
+      } catch (err) {
+        console.log(
+          `Cache des titres non enregistré (${err.code || err.message}). La liste reste utilisable pour cette séance.`,
+        );
+      }
+    }
+  } finally {
+    onSpotifyWait = null;
   }
   if (!quiet) {
     console.log(`Index ready: ${Object.values(index.tracks).filter((t) => t.title).length} titled, ${failed} failed.`);

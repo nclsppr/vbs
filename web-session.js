@@ -50,8 +50,8 @@ function createWebSession(deps) {
     try {
       await deps.buildIndex(deps.party, {
         quiet: true,
-        onProgress: (done, total) => {
-          progress = { step: 'index', done, total };
+        onProgress: (done, total, waiting = false) => {
+          progress = { step: 'index', done, total, waiting: Boolean(waiting) };
         },
       });
     } finally {

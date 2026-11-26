@@ -497,6 +497,9 @@ Oui, environ 30 secondes : le script télécharge la liste des titres des 400
 chansons pour pouvoir les retrouver par leur nom. C'est mis en cache dans
 `data\tracks-index.json`, les lancements suivants sont instantanés. Quand
 quelqu'un ajoute une chanson, la mise à jour se refait toute seule.
+Si le compteur s'arrête et que la ligne dit « petite pause », le service des
+titres demande de ralentir : ça reprend tout seul. Un titre qui ne répond pas
+est laissé de côté et relu au prochain lancement.
 
 **Ça marche encore pour une autre soirée ?**
 Oui, avec `--party` et l'identifiant de la party :
