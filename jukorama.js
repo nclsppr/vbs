@@ -36,6 +36,7 @@ const { execFileSync, spawnSync } = require('node:child_process');
 const fx = require('./fx.js');
 const { CrtScreen } = require('./crt.js');
 const { extractCoverUrl } = require('./covers.js');
+const { readJson, writeJson } = require('./data-file.js');
 
 // Corporate proxies re-sign TLS traffic; trust the OS store so fetch() works.
 if (typeof tls.setDefaultCACertificates === 'function') {
@@ -189,23 +190,6 @@ const UA =
 // ---------------------------------------------------------------------------
 // small helpers
 // ---------------------------------------------------------------------------
-
-function ensureDataDir() {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch {
-    return fallback;
-  }
-}
-
-function writeJson(file, value) {
-  ensureDataDir();
-  fs.writeFileSync(file, JSON.stringify(value, null, 2));
-}
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -525,12 +509,34 @@ async function fetchBinary(url) {
   return { type, bytes };
 }
 
+// Kept for the session, so the file is not read again while titles are added.
+let cachedIndex = null;
+
+function blankIndex() {
+  return { party: DEFAULT_PARTY, tracks: {} };
+}
+
 async function loadIndex() {
-  return readJson(INDEX_FILE, { party: DEFAULT_PARTY, tracks: {} });
+  if (cachedIndex) return cachedIndex;
+  try {
+    cachedIndex = readJson(INDEX_FILE, blankIndex());
+  } catch (err) {
+    // Unreadable, not absent: look the titles up. The file already there is left as it is.
+    cachedIndex = blankIndex();
+    console.log(`Cache des titres illisible (${err.code || err.message}). Les titres seront relus.`);
+  }
+  return cachedIndex;
+}
+
+function saveIndexFile(index) {
+  cachedIndex = index;
+  writeJson(INDEX_FILE, index);
 }
 
 async function buildIndex(party, { force = false, quiet = false, onProgress = null } = {}) {
   const index = force ? { party, tracks: {} } : await loadIndex();
+  cachedIndex = index;
+  const partyBefore = index.party;
   if (index.party !== party) index.tracks = {};
   index.party = party;
 
@@ -556,6 +562,7 @@ async function buildIndex(party, { force = false, quiet = false, onProgress = nu
   let done = 0;
   const total = missing.length;
   let failed = 0;
+  let dirty = force || index.party !== partyBefore;
   if (onProgress) onProgress(0, total); // the listener knows how many are coming before the first one is read
 
   async function worker() {
@@ -569,15 +576,25 @@ async function buildIndex(party, { force = false, quiet = false, onProgress = nu
         failed++;
         index.tracks[track.key] = { id: track.id, title: null, artists: null, error: meta.error };
       }
+      dirty = true;
       done++;
       if (onProgress) onProgress(done, total);
       if (!quiet && done % 25 === 0) console.log(`  resolved ${done}/${total}`);
-      writeJson(INDEX_FILE, index);
     }
   }
 
+  // One write for the whole list. Rewriting the file after every title is what
+  // made a network folder answer EBUSY, and what made the page fail on it.
   await Promise.all(Array.from({ length: 3 }, () => worker()));
-  writeJson(INDEX_FILE, index);
+  if (dirty) {
+    try {
+      saveIndexFile(index);
+    } catch (err) {
+      console.log(
+        `Cache des titres non enregistré (${err.code || err.message}). La liste reste utilisable pour cette séance.`,
+      );
+    }
+  }
   if (!quiet) {
     console.log(`Index ready: ${Object.values(index.tracks).filter((t) => t.title).length} titled, ${failed} failed.`);
   }
@@ -2094,7 +2111,7 @@ function webDependencies(args) {
     fetchTrackArt,
     fetchBinary,
     asAccount,
-    saveIndex: (index) => writeJson(INDEX_FILE, index),
+    saveIndex: saveIndexFile,
     authFileExists: () => fs.existsSync(AUTH_FILE),
   };
 }

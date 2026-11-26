@@ -27,7 +27,7 @@ rem block that has more commands after it, and the caller would see a success.
 set "BAD_FILE="
 if defined NODE_EXE (
   echo [1/4] Verification syntaxe des scripts...
-  for %%F in (jukorama.js fx.js crt.js covers.js web.js web-session.js web\js\*.mjs) do (
+  for %%F in (jukorama.js data-file.js fx.js crt.js covers.js web.js web-session.js web\js\*.mjs) do (
     if not defined BAD_FILE (
       "%NODE_EXE%" -c "%%F"
       if errorlevel 1 set "BAD_FILE=%%F"
@@ -70,7 +70,7 @@ del /q dist\* >nul 2>nul
 if exist dist\node rmdir /s /q dist\node >nul 2>nul
 if exist dist\web rmdir /s /q dist\web >nul 2>nul
 
-for %%F in (jukorama.js fx.js crt.js covers.js web.js web-session.js Voter.cmd Voter-prive.cmd Voter-web.cmd Voter-web-prive.cmd INSTALLATION.txt) do (
+for %%F in (jukorama.js data-file.js fx.js crt.js covers.js web.js web-session.js Voter.cmd Voter-prive.cmd Voter-web.cmd Voter-web-prive.cmd INSTALLATION.txt) do (
   if exist "%%F" (
     copy /y "%%F" dist\ >nul
   ) else (
